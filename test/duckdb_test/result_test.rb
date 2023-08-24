@@ -175,6 +175,14 @@ module DuckDBTest
       assert_equal(expected_blob, @result.send(:_to_blob, 0, 10))
     end
 
+    def test__to_a_segmentation_fault
+      DuckDB::Database.open do |db|
+        db.connect do |con|
+          assert_equal(con.query('SELECT NULL::UUID, NULL::UUID').to_a, [[nil, nil]])
+        end
+      end
+    end
+
     private
 
     def create_data
